@@ -256,20 +256,38 @@ Resources:
           sudo echo GoldenWasteDB > /etc/hostname
 
 Outputs:
-  MasterInstanceIP:
+  AnsibleMasterInstancePublicIP:
     Value: !GetAtt 
       - AnsibleMasterInstance
       - PublicIp
     Description: Master Instance Public IP
 
-  WebAppInstanceIP:
+  AnsibleMasterInstancePrivateIP:
+    Value: !GetAtt 
+      - AnsibleMasterInstance
+      - PublicIp
+    Description: Master Instance Private IP
+
+  WebAppInstancePublicIP:
     Value: !GetAtt 
       - WebAppInstance
       - PublicIp
-    Description: Web Application Public IP
+    Description: Web Application Instance Public IP
 
-  MySQLInstanceIP:
+  AnsibleMasterInstancePrivateIP:
+    Value: !GetAtt 
+      - WebAppInstance
+      - PublicIp
+    Description: Web Application Instance Private IP
+
+  MySQLInstancePublicIP:
     Value: !GetAtt 
       - MySQLInstance
       - PublicIp
-    Description: MySQL Database Public IP 
+    Description: MySQL Database Instance Public IP
+
+  AnsibleMasterInstancePrivateIP:
+    Value: !GetAtt 
+      - MySQLInstance
+      - PublicIp
+    Description: MySQL Database Instance Private IP 
