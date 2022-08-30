@@ -1,0 +1,11 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Copy Nginx configuration for Java Web App
+  template:
+    src: default.conf
+    dest: /etc/nginx/conf.d/default.conf
+  notify: restart nginx

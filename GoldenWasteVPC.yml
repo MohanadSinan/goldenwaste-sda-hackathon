@@ -68,8 +68,6 @@ Resources:
     Description: Golden Waste VPC definition
     Properties:
       CidrBlock: 10.0.0.0/16
-      EnableDnsSupport: true
-      EnableDnsHostnames: true
       Tags:
         - Key: Name
           Value: GoldenWasteVPC
@@ -82,7 +80,7 @@ Resources:
       VpcId: !Ref GoldenWasteVPC
       Tags:
         - Key: Name
-          Value: GoldenWasteSubnetPublic
+          Value: GoldenWasteSubnet | Public
 
   GoldenWasteSubnetPrivate:
     Type: 'AWS::EC2::Subnet'
@@ -92,7 +90,7 @@ Resources:
       VpcId: !Ref GoldenWasteVPC
       Tags:
         - Key: Name
-          Value: GoldenWasteSubnetPrivate
+          Value: GoldenWasteSubnet | Private
 
   GoldenWastePublicRouteTable:
     Type: 'AWS::EC2::RouteTable'
@@ -130,11 +128,11 @@ Resources:
       RouteTableId: !Ref GoldenWastePublicRouteTable
       SubnetId: !Ref GoldenWasteSubnetPublic
 
-  WebAppSecurityGroup:
+  GoldenWasteSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupName: WebAppSecurityGroup
-      GroupDescription: 'Allow ports 80 for HTTP,8080 for java app and 22 for SSH'
+      GroupName: GoldenWasteSecurityGroup
+      GroupDescription: 'Allow ports 80 for HTTP,8080 for java app, 22 for SSH and 3306 for MySQL'
       VpcId: !Ref GoldenWasteVPC
       SecurityGroupIngress:
         - CidrIp: !Ref HTTPLocation
@@ -152,13 +150,16 @@ Resources:
           FromPort: 22
           ToPort: 22
           Description: SSH
+        - CidrIp: !Ref DBLocation
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
 
   MasterSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupName: MasterSecurityGroup
-      GroupDescription: >-
-        Allow ports 80 for HTTP, 22 for SSH, 8080 for Jenkins and 9000 for SonarQube
+      GroupDescription: 'Allow ports 80 for HTTP, 22 for SSH, 8080 for Jenkins and 9000 for SonarQube'
       VpcId: !Ref GoldenWasteVPC
       SecurityGroupIngress:
         - CidrIp: !Ref HTTPLocation
@@ -185,32 +186,14 @@ Resources:
   MySQLSecurityGroupIngress:
     Type: 'AWS::EC2::SecurityGroupIngress'
     Properties:
-      GroupId: !GetAtt MySQLSecurityGroup.GroupId
-      SourceSecurityGroupId: !GetAtt WebAppSecurityGroup.GroupId
+      GroupId: !GetAtt GoldenWasteSecurityGroup.GroupId
+      SourceSecurityGroupId: !GetAtt GoldenWasteSecurityGroup.GroupId
       Description: MySQL Security Group Ingress Rule
       IpProtocol: tcp
       FromPort: 0
       ToPort: 0
 
-  MySQLSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupName: MySQLSecurityGroup
-      GroupDescription: Allow ports 22 for SSH and 3306 for MySQL
-      VpcId: !Ref GoldenWasteVPC
-      SecurityGroupIngress:
-        - CidrIp: !Ref DBLocation
-          IpProtocol: tcp
-          FromPort: 3306
-          ToPort: 3306
-          Description: MySQL
-        - CidrIp: !Ref SSHLocation
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          Description: SSH
-
-  MasterInstance:
+  AnsibleMasterInstance:
     Type: 'AWS::EC2::Instance'
     Properties:
       ImageId: !Ref LatestUbuntuAmiId
@@ -232,15 +215,18 @@ Resources:
           sudo apt install software-properties-common -y
           sudo add-apt-repository --yes --update ppa:ansible/ansible
           sudo apt install ansible -y
-          sudo usermod -a -G root ansible
-          sudo systemctl restart ansible
           # Install Git
-          sudo install git -y
+          sudo apt install git -y
           # Clone a github repository
           sudo git clone https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste
           # Setting instance hostname
           sudo hostname Master
           sudo echo Master > /etc/hostname
+          # Install AWS CLI
+          sudo apt install awscli -y
+          # Run setup.sh script
+          sudo chmod +x /home/ubuntu/GoldenWaste/ansible/setup.sh
+          /home/ubuntu/GoldenWaste/ansible/setup.sh
 
   WebAppInstance:
     Type: 'AWS::EC2::Instance'
@@ -250,7 +236,7 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !GetAtt 
-          - WebAppSecurityGroup
+          - GoldenWasteSecurityGroup
           - GroupId
       SubnetId: !Ref GoldenWasteSubnetPublic
       Tags:
@@ -271,7 +257,7 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !GetAtt 
-          - MySQLSecurityGroup
+          - GoldenWasteSecurityGroup
           - GroupId
       SubnetId: !Ref GoldenWasteSubnetPrivate
       Tags:
@@ -285,57 +271,32 @@ Resources:
           sudo echo GoldenWasteDB > /etc/hostname
 
 Outputs:
-  MasterInstanceURL:
-    Value: !Sub 
-      - 'http://${PublicAddress}'
-      - PublicAddress: !GetAtt MasterInstance.PublicDnsName
-    Description: Master Instance URL
   MasterInstanceIP:
     Value: !GetAtt 
-      - MasterInstance
+      - AnsibleMasterInstance
       - PublicIp
     Description: Master Instance Public IP
 
-  JenkinsURL:
-    Value: !Sub 
-      - 'http://${PublicAddress}:8080'
-      - PublicAddress: !GetAtt MasterInstance.PublicDnsName
-    Description: Jenkins URL
   JenkinsIP:
     Value: !Sub 
       - 'http://${PublicIp}:8080'
-      - PublicIp: !GetAtt MasterInstance.PublicIp
+      - PublicIp: !GetAtt AnsibleMasterInstance.PublicIp
     Description: Jenkins Public IP
 
-  SonarQubeURL:
-    Value: !Sub 
-      - 'http://${PublicAddress}:9000'
-      - PublicAddress: !GetAtt MasterInstance.PublicDnsName
-    Description: SonarQube URL
   SonarQubeIP:
     Value: !Sub 
       - 'http://${PublicIp}:9000'
-      - PublicIp: !GetAtt MasterInstance.PublicIp
+      - PublicIp: !GetAtt AnsibleMasterInstance.PublicIp
     Description: SonarQube Public IP
 
-  WebAppInstanceURL:
-    Value: !Sub 
-      - 'http://${PublicAddress}'
-      - PublicAddress: !GetAtt WebAppInstance.PublicDnsName
-    Description: Web Application URL
   WebAppInstanceIP:
     Value: !GetAtt 
       - WebAppInstance
       - PublicIp
     Description: Web Application Public IP
 
-  MySQLInstanceURL:
-    Value: !Sub 
-      - 'http://${PublicAddress}'
-      - PublicAddress: !GetAtt MySQLInstance.PublicDnsName
-    Description: MySQL Database URL
   MySQLInstanceIP:
     Value: !GetAtt 
       - MySQLInstance
       - PublicIp
-    Description: MySQL Database Public IP
+    Description: MySQL Database Public IP 

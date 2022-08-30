@@ -41,7 +41,7 @@ Run **`setup.yml`** playbook:
 >
 > You can ping the hosts servers to test the connection status by putting this command:
 >
-> **`sudo ansible all -m ping -o -i /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts`**
+> **`sudo ansible all -m ping -o -f 1 -i /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts`**
 
 **`sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup.yml -i /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts`**
 

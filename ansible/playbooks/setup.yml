@@ -1,5 +1,26 @@
 ---
-  - import_playbook: install-tools.yml
-  - import_playbook: install-java-maven.yml
-  - import_playbook: install-mysql.yml
-  - import_playbook: run-sonarqube.yml
+- name: Install Java, maven and Nginx
+  hosts: GoldenWasteWebApp
+  become: yes
+  become_method: sudo
+
+  roles:
+    - maven
+    - java
+    - nginx
+
+- name: Install MySQL
+  hosts: GoldenWasteDB
+  become: yes
+  become_method: sudo
+
+  roles:
+    - mysql
+
+- name: Start Deploying
+  hosts: GoldenWasteWebApp
+  become: yes
+  become_method: sudo
+
+  roles:
+    - deploy

@@ -1,0 +1,21 @@
+---
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_URL={{ ansible_host }}" >> ~/.profile
+
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_PORT={{ mysql_port }}" >> ~/.profile
+
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_NAME={{ db_name }}" >> ~/.profile
+
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_USERNAME={{ db_user }}" >> ~/.profile
+  
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_PASSWORD={{ db_password }}" >> ~/.profile
+
+- name: "Deploy jar file"
+  shell: java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar
+
+- name: Wait for WebApp to start
+  wait_for: port=80 timeout=60

@@ -1,0 +1,9 @@
+---
+# These are the WordPress database settings
+db_name: goldenwastedb 
+db_user: goldenwaste
+db_password: DevOps2022
+mysql_root_password: DevOps@2022
+
+# You shouldn't need to change this.
+mysql_port: 3306
