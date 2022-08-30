@@ -1,15 +1,18 @@
 ---
-- name: "Launch database container"
+- name: Launch database container
   docker_container:
-    name: "{{ db_name }}"
-    image: mysql
-    ports:
-      - "{{ mysql_port }}:3306"
-    restart: true
-    alias:
-    - "{{ db_name }}"
     env:
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
       MYSQL_DATABASE: "{{ db_name }}"
       MYSQL_USER: "{{ db_user }}"
       MYSQL_PASSWORD: "{{ db_password }}"
+    image: mysql
+    labels:
+      traefik.enable: "false"
+    name: "{{ mysql_container_name }}"
+    ports:
+      - "{{ mysql_port }}:3306"
+    pull: true
+    recreate: true
+    restart_policy: always
+    state: "{{ mysql_state }}"

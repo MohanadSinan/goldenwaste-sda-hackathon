@@ -5,5 +5,6 @@ db_user: goldenwaste
 db_password: DevOps2022
 mysql_root_password: DevOps@2022
 mysql_container_name: MySQL
+mysql_state: started
 # You shouldn't need to change this.
 mysql_port: 3306
