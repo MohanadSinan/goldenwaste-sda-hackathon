@@ -1,4 +1,6 @@
 #!/bin/bash
+# Change the permissions of private SSH key
+chmod 400 /home/ubuntu/GoldenWaste/.ssh/temp.pem
 # Setting Ansible environmental configuration
 if test -z "$ANSIBLE_INVENTORY" 
 then
