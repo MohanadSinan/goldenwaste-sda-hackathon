@@ -162,21 +162,6 @@ Resources:
       GroupDescription: 'Allow ports 80 for HTTP, 22 for SSH, 8080 for Jenkins and 9000 for SonarQube'
       VpcId: !Ref GoldenWasteVPC
       SecurityGroupIngress:
-        - CidrIp: !Ref HTTPLocation
-          IpProtocol: tcp
-          FromPort: 8080
-          ToPort: 8080
-          Description: Jenkins
-        - CidrIp: !Ref HTTPLocation
-          IpProtocol: tcp
-          FromPort: 9000
-          ToPort: 9000
-          Description: SonarQube
-        - CidrIp: !Ref HTTPLocation
-          IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          Description: HTTP
         - CidrIp: !Ref SSHLocation
           IpProtocol: tcp
           FromPort: 22
