@@ -1,5 +1,5 @@
 ---
-- name: Install Java, maven and Nginx
+- name: Setup the Web App Server
   hosts: GoldenWasteWebApp
   become: yes
   become_method: sudo
@@ -9,7 +9,7 @@
     - java
     - nginx
 
-- name: Install MySQL
+- name: Setup the Database Server
   hosts: GoldenWasteDB
   become: yes
   become_method: sudo

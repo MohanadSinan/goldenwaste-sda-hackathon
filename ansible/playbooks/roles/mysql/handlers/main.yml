@@ -1,5 +1,5 @@
 ---
-- name: Restart MySQL
+- name: restart nginx
   service:
     name: mysqld
     state: restarted
