@@ -16,3 +16,5 @@
     recreate: true
     restart_policy: always
     state: "{{ mysql_state }}"
+
+    # docker run --name MySQL -e MYSQL_ROOT_PASSWORD=DevOps@2022 -e MYSQL_DATABASE=goldenwastedb -e MYSQL_USER=goldenwaste -e MYSQL_PASSWORD=DevOps2022 -p 3306:3306 -d mysql

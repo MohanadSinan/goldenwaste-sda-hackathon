@@ -18,4 +18,10 @@
   shell: . /etc/profile
 
 - name: Clone a github repository
-  shell: sudo git clone -b EC2_VPC_v2 https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste
+  shell: git clone -b EC2_VPC_v2 https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste
+
+- name: Changing the owner of GoldenWaste file
+  shell: chown ubuntu /home/ubuntu/GoldenWaste
+
+- name: Changing the group ownership of GoldenWaste file
+  shell: chgrp ubuntu /home/ubuntu/GoldenWaste

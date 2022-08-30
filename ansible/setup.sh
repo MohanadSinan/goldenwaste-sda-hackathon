@@ -50,10 +50,33 @@ then
 else
       echo "No need to set \$DB_PRIVATE_IP is in your environment"
 fi
+if test -z "$WEB_PUBLIC_IP" 
+then
+      echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PubliceIpAddress' --output text)" >> /etc/profile
+      echo "\$WEB_PUBLIC_IP is in your environment"
+else
+      echo "No need to set \$WEB_PUBLIC_IP is in your environment"
+fi
 # Reload bash's .profile
 . /etc/profile
 # Update the Ansible inventory file
 echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 echo "Ansible inventory file updated"
+# Update the default.conf file
+echo 'server {
+    listen 80;
+
+    server_name $WEB_PUBLIC_IP;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}' > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+echo "default.conf file updated"
 # Reload bash's .profile
 . /etc/profile

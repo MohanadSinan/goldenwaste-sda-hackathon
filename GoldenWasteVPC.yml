@@ -203,7 +203,7 @@ Resources:
           # Install Git
           sudo apt install git -y
           # Clone a github repository
-          sudo git clone -b EC2_VPC_v2 https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste
+          git clone -b EC2_VPC_v2 https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste
           # Setting instance hostname
           sudo hostname Master
           sudo echo Master > /etc/hostname
