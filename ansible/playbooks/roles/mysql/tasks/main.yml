@@ -1,51 +1,15 @@
 ---
-- name: Install python, pip, MySQL etc.
-  apt:
-    name: "{{ packages }}"
-    state: present
-    update_cache: yes
-  vars:
-    packages:
-      - python3-pip
-      - python3-dev
-      - default-libmysqlclient-dev
-      - build-essential
-      - mysql-server
-      - mysql-client
-
-- name: pip install mysqlclient
-  shell: pip install mysqlclient
-
-- name: Configure SELinux to start mysql on any port
-  seboolean:
-    name: mysql_connect_any
-    state: true
-    persistent: yes
-  when: ansible_selinux.status == "enabled"
-
-- name: Create MySQL configuration file
-  template:
-    src: my.cnf.j2
-    dest: /etc/my.cnf
-  notify:
-  - restart mysql
-
-- name: Start MySQL Service
-  service:
-    name: mysql
-    state: started
-    enabled: yes
-
-- name: Create a new database  
-  mysql_db:
+- name: "Launch database container"
+  docker_container:
     name: "{{ db_name }}"
-    state: present
-
-- name: Create a new database user
-  mysql_user:
-    name: "{{ db_user }}"
-    password: "{{ db_password }}"
-    priv: "{{ db_name }}.*:ALL"
-    host: 'localhost'
-    state: present
-  notify: restart nginx
+    image: mysql
+    ports:
+      - "{{ mysql_port }}:3306"
+  restart: true
+  alias:
+  - "{{ db_name }}"
+  env:
+    MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+    MYSQL_DATABASE: "{{ db_name }}"
+    MYSQL_USER: "{{ db_user }}"
+    MYSQL_PASSWORD: "{{ db_password }}"

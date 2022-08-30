@@ -8,6 +8,7 @@
     - maven
     - java
     - nginx
+    - setup
 
 - name: Setup the Database Server
   hosts: GoldenWasteDB
@@ -15,6 +16,7 @@
   become_method: sudo
 
   roles:
+    - docker
     - mysql
 
 - name: Start Deploying

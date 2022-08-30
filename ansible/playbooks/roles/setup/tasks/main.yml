@@ -1,0 +1,21 @@
+---
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_URL={{ ansible_host }}" >> /etc/profile
+
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_PORT={{ mysql_port }}" >> /etc/profile
+
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_NAME={{ db_name }}" >> /etc/profile
+
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_USERNAME={{ db_user }}" >> /etc/profile
+  
+- name: Set Linux environment variables
+  shell: echo "export GOLDEN_DB_PASSWORD={{ db_password }}" >> /etc/profile
+
+- name: Reload bash's .profile
+  shell: . /etc/profile
+
+- name: Clone a github repository
+  shell: sudo git clone -b EC2_VPC_v2 https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste

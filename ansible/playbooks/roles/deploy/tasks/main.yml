@@ -1,21 +1,18 @@
 ---
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_URL={{ ansible_host }}" >> ~/.profile
+- name: mvn validate
+  shell: chdir=/home/ubuntu/GoldenWaste mvn validate
 
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_PORT={{ mysql_port }}" >> ~/.profile
+- name: mvn clean
+  shell: chdir=/home/ubuntu/GoldenWaste mvn clean
 
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_NAME={{ db_name }}" >> ~/.profile
+- name: mvn compile
+  shell: chdir=/home/ubuntu/GoldenWaste mvn compile
 
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_USERNAME={{ db_user }}" >> ~/.profile
-  
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_PASSWORD={{ db_password }}" >> ~/.profile
+- name: mvn test
+  shell: chdir=/home/ubuntu/GoldenWaste mvn test
 
-- name: Reload bash's .profile
-  shell: . /etc/profile
+- name: mvn package
+  shell: chdir=/home/ubuntu/GoldenWaste mvn package
 
 - name: "Deploy jar file"
   shell: java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar

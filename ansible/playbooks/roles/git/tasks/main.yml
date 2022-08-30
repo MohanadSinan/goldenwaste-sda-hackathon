@@ -1,0 +1,6 @@
+---
+- name: Install Java
+  apt:
+    name: git
+    state: present
+    update_cache: yes
