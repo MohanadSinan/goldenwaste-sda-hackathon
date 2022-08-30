@@ -211,7 +211,7 @@ Resources:
           sudo apt install awscli -y
           # Run setup.sh script
           sudo chmod +x /home/ubuntu/GoldenWaste/ansible/setup.sh
-          /home/ubuntu/GoldenWaste/ansible/setup.sh
+          sudo /home/ubuntu/GoldenWaste/ansible/setup.sh
 
   WebAppInstance:
     Type: 'AWS::EC2::Instance'
