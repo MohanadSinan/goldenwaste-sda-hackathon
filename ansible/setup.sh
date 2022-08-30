@@ -6,7 +6,7 @@ chmod 400 /home/ubuntu/GoldenWaste/.ssh/temp.pem
 # Setting Ansible environmental configuration
 if test -z "$ANSIBLE_INVENTORY" 
 then
-      echo "export ANSIBLE_INVENTORY=$(echo /home/ec2-user/GoldenWaste/ansible/hosts/GoldenWasteHosts)" >> /etc/profile
+      echo "export ANSIBLE_INVENTORY=$(echo /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts)" >> /etc/profile
       echo "\$ANSIBLE_INVENTORY is in your environment"
 else
       echo "No need to set \$ANSIBLE_INVENTORY in your environment"
@@ -53,7 +53,7 @@ fi
 # Reload bash's .profile
 . /etc/profile
 # Update the Ansible inventory file
-echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ec2-user ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ec2-user ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ec2-user/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 echo "Ansible inventory file updated"
 # Reload bash's .profile
 . /etc/profile
