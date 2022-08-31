@@ -4,6 +4,6 @@
     name: nginx
     state: present
 
-- name: Copy Nginx configuration for Java Web App
+- name: Copy Nginx configuration for proxy pass from port 8080 to port 80
   script: site-enable.sh
   notify: restart nginx

@@ -1,5 +1,5 @@
 ---
-- name: Install Java
+- name: Install git
   apt:
     name: git
     state: present

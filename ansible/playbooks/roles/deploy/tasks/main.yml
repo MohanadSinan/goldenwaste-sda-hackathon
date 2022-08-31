@@ -1,5 +1,5 @@
 ---
-- name: application.properties file
+- name: Copy the project files to the host
   copy:
     src: /home/ubuntu/GoldenWaste
     dest: /home/ubuntu/GoldenWaste
@@ -19,22 +19,22 @@
 - name: mvn package
   shell: chdir=/home/ubuntu/GoldenWaste mvn package
 
-- name:
+- name: copy goldenwaste.service to systemd
   become: yes
   become_method: sudo
   template:
-    src: goldenwaste.service
+    src: goldenwaste.service.j2
     dest: /usr/lib/systemd/system/goldenwaste.service
-
-- name: Enable goldenwaste.service
-  become: yes
-  become_method: sudo
-  shell: systemctl enable goldenwaste.service
 
 - name: Start goldenwaste.service
   become: yes
   become_method: sudo
   shell: systemctl start goldenwaste.service
+
+- name: Enable goldenwaste.service
+  become: yes
+  become_method: sudo
+  shell: systemctl enable goldenwaste.service
 
 - name: Wait for WebApp to start
   wait_for: port=80 timeout=60

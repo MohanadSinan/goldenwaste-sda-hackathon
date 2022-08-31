@@ -1,26 +1,14 @@
 ---
-- name: Setting WEB_PRIVATE_IP as an environment variables
-  shell: echo "export WEB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)" >> ~/.profile
-
-- name: Setting DB_PRIVATE_IP as an environment variables
-  shell: echo "export DB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteDB --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)" >> ~/.profile
-
-- name: Setting WEB_PUBLIC_IP as an environment variables
-  shell: echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> ~/.profile
-
 - name: Update the Ansible inventory file
-  shell: echo -e '[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem' > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+  shell: echo -e '[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem' > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts.temp
 
-- name: Update the Ansible inventory file
-  shell: tail -f /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts | grep org.springframework | cut -c 5-
+- shell: tail -c +4 /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts.temp > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 
 - name: Update the application.properties file
-  shell: echo -e 'spring.mvc.view.prefix=/WEB-INF/\nspring.datasource.url=jdbc:mysql://$DB_PRIVATE_IP:{{ mysql_port }}/{{ db_name }}\nspring.datasource.username={{ db_user }}\nspring.datasource.password={{ db_password }}\nspring.jpa.hibernate.ddl-auto=create\nspring.mvc.hiddenmethod.filter.enabled=true' > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties
+  shell: echo -e 'spring.mvc.view.prefix=/WEB-INF/\nspring.datasource.url=jdbc:mysql://$DB_PRIVATE_IP:{{ mysql_port }}/{{ db_name }}\nspring.datasource.username={{ db_user }}\nspring.datasource.password={{ db_password }}\nspring.jpa.hibernate.ddl-auto=create\nspring.mvc.hiddenmethod.filter.enabled=true' > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.temp
 
-- name: Update the Ansible inventory file
-  shell: tail -f /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties | grep org.springframework | cut -c 5-
+- shell:  tail -c +4 /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.temp > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.j2
 
-- name: Update the application.properties file
-  template:
-    src: application.properties
+- template:
+    src: application.properties.j2
     dest: /home/ubuntu/GoldenWaste/src/main/resources/application.properties
