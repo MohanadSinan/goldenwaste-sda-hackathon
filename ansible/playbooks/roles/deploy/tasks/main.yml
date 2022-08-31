@@ -1,20 +1,32 @@
 ---
 - name: Set Linux environment variables
+  become: yes
+  become_user: ubuntu
   shell: export GOLDEN_DB_URL={{ ansible_host }}
 
 - name: Set Linux environment variables
+  become: yes
+  become_user: ubuntu
   shell: export GOLDEN_DB_PORT={{ mysql_port }}
 
 - name: Set Linux environment variables
+  become: yes
+  become_user: ubuntu
   shell: export GOLDEN_DB_NAME={{ db_name }}
 
 - name: Set Linux environment variables
+  become: yes
+  become_user: ubuntu
   shell: export GOLDEN_DB_USERNAME={{ db_user }}
   
 - name: Set Linux environment variables
+  become: yes
+  become_user: ubuntu
   shell: export GOLDEN_DB_PASSWORD={{ db_password }}
 
 - name: Clone a github repository
+  become: yes
+  become_user: ubuntu
   git:
     repo: 'https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git'
     dest: /home/ubuntu/GoldenWaste
