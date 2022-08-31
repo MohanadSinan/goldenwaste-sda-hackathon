@@ -27,9 +27,13 @@
     dest: /usr/lib/systemd/system/goldenwaste.service
 
 - name: Enable goldenwaste.service
+  become: yes
+  become_method: sudo
   shell: systemctl enable goldenwaste.service
 
 - name: Start goldenwaste.service
+  become: yes
+  become_method: sudo
   shell: systemctl start goldenwaste.service
 
 - name: Wait for WebApp to start
