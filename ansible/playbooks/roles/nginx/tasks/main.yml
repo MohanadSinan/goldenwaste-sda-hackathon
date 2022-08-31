@@ -5,5 +5,5 @@
     state: present
 
 - name: Copy Nginx configuration for Java Web App
-  shell: . /home/ubuntu/GoldenWaste/ansible/playbooks/roles/nginx/templates/site-enable.sh
+  script: site-enable.sh
   notify: restart nginx

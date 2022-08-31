@@ -9,10 +9,16 @@
   shell: echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> ~/.profile
 
 - name: Update the Ansible inventory file
-  shell: echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+  shell: echo -e '[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem' > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+
+- name: Update the Ansible inventory file
+  shell: tail -f /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts | grep org.springframework | cut -c 5-
 
 - name: Update the application.properties file
-  shell: echo -e "spring.mvc.view.prefix=/WEB-INF/\nspring.datasource.url=jdbc:mysql://$DB_PRIVATE_IP:{{ mysql_port }}/{{ db_name }}\nspring.datasource.username={{ db_user }}\nspring.datasource.password={{ db_password }}\nspring.jpa.hibernate.ddl-auto=create\nspring.mvc.hiddenmethod.filter.enabled=true" > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties
+  shell: echo -e 'spring.mvc.view.prefix=/WEB-INF/\nspring.datasource.url=jdbc:mysql://$DB_PRIVATE_IP:{{ mysql_port }}/{{ db_name }}\nspring.datasource.username={{ db_user }}\nspring.datasource.password={{ db_password }}\nspring.jpa.hibernate.ddl-auto=create\nspring.mvc.hiddenmethod.filter.enabled=true' > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties
+
+- name: Update the Ansible inventory file
+  shell: tail -f /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties | grep org.springframework | cut -c 5-
 
 - name: Update the application.properties file
   template:
