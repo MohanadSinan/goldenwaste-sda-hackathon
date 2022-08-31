@@ -12,7 +12,15 @@ aws_region: us-east-1
 aws_output: text
 ```
 
-sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup.yml
+sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup1.yml
+
+
+
+sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup2.yml
+
+
+
+sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/start.yml
 
 
 

@@ -9,12 +9,18 @@
   shell: echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> ~/.profile
 
 - name: Update the Ansible inventory file
-  shell: echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+  template:
+    src: GoldenWasteHosts
+    dest: /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+  #shell: echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 
 - name: Update the default.conf file
-  shell: echo -e "server {\n    listen 80;\n\n    server_name $WEB_PUBLIC_IP ;\n\n    location / {\n        proxy_pass http://localhost:8080;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection 'upgrade';\n        proxy_set_header Host $host;\n        proxy_cache_bypass $http_upgrade;\n    }\n}" > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/nginx/templates/default.conf
+  template:
+    src: default.conf
+    dest: /home/ubuntu/GoldenWaste/ansible/playbooks/roles/nginx/templates/default.conf
+  #shell: echo -e "server {\n    listen 80;\n\n    server_name $WEB_PUBLIC_IP ;\n\n    location / {\n        proxy_pass http://localhost:8080;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection 'upgrade';\n        proxy_set_header Host $host;\n        proxy_cache_bypass $http_upgrade;\n    }\n}" > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/nginx/templates/default.conf
 
-- name: Update the default.conf file
+- name: Update the application.properties file
   template:
     src: application.properties
     dest: /home/ubuntu/GoldenWaste/src/main/resources/application.properties
