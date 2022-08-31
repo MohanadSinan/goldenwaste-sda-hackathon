@@ -21,8 +21,6 @@
 
 - name: Start Deploying
   hosts: GoldenWasteWebApp
-  become: yes
-  become_method: sudo
 
   roles:
     - deploy
