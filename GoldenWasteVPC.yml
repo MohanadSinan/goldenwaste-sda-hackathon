@@ -266,7 +266,7 @@ Outputs:
   AnsibleMasterInstancePrivateIP:
     Value: !GetAtt 
       - AnsibleMasterInstance
-      - PublicIp
+      - PrivateIp
     Description: Master Instance Private IP
 
   WebAppInstancePublicIP:
@@ -278,7 +278,7 @@ Outputs:
   WebAppInstancePrivateIP:
     Value: !GetAtt 
       - WebAppInstance
-      - PublicIp
+      - PrivateIp
     Description: Web Application Instance Private IP
 
   MySQLInstancePublicIP:
@@ -290,5 +290,5 @@ Outputs:
   MySQLInstancePrivateIP:
     Value: !GetAtt 
       - MySQLInstance
-      - PublicIp
+      - PrivateIp
     Description: MySQL Database Instance Private IP 
