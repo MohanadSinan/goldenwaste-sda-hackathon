@@ -11,7 +11,16 @@
 - name: Copy AWS config file
   template:
     src: config
-    dest: /home/ubuntu/GoldenWaste/.aws/config
+    dest: /home/ubuntu/.aws/config
+    mode: '0600'
+    force: yes
+
+- name: Copy AWS credentials file
+  template:
+    src: credentials
+    dest: /home/ubuntu/.aws/credentials
+    mode: '0600'
+    force: yes
 
 - name: Setting WEB_PRIVATE_IP as an environment variables
   shell: echo "export WEB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)" >> ~/.profile
