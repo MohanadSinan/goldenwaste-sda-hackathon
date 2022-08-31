@@ -14,13 +14,13 @@ aws_output: text
 
 sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup1.yml
 
-
+`. ~/.profile`
 
 sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup2.yml
 
+sudo ansible all -m ping -o -f 1 -i /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 
-
-sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/start.yml
+sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/start.yml -i /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 
 
 

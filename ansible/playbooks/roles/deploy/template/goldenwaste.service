@@ -1,0 +1,9 @@
+[Unit]
+Description=GoldenWaste webserver Daemon
+
+[Service]
+ExecStart=/usr/bin/java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar
+User=user
+
+[Install]
+WantedBy=multi-user.target

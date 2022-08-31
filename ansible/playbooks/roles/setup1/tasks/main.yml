@@ -1,17 +1,11 @@
 ---
 - name: Setting ANSIBLE_INVENTORY environmental configuration
-  become: yes
-  become_method: sudo
   shell: echo "export ANSIBLE_INVENTORY=/home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts" >> ~/.profile
 
 - name: Setting ANSIBLE_HOST_KEY_CHECKING environmental configuration
-  become: yes
-  become_method: sudo
   shell: echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> ~/.profile
 
 - name: Reload .profile file
-  become: yes
-  become_method: sudo
   shell: . ~/.profile
 
 - name: make .aws dir
@@ -34,6 +28,3 @@
 
 - name: Setting DB_PRIVATE_IP as an environment variables
   shell: echo "export DB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteDB --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)" >> ~/.profile
-
-- name: Setting WEB_PUBLIC_IP as an environment variables
-  shell: echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> ~/.profile

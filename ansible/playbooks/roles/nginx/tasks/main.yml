@@ -4,8 +4,6 @@
     name: nginx
     state: present
 
-#- name: Copy Nginx configuration for Java Web App
-#  template:
-#    src: default.conf
-#    dest: /etc/nginx/conf.d/default.conf
-#  notify: restart nginx
+- name: Copy Nginx configuration for Java Web App
+  shell: . /home/ubuntu/GoldenWaste/ansible/playbooks/roles/nginx/templates/site-enable.sh
+  notify: restart nginx
