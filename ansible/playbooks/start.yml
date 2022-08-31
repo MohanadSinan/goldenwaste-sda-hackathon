@@ -1,6 +1,7 @@
 ---
 - name: Setup the Web App Server
   hosts: GoldenWasteWebApp
+  gather_facts: false
   become: yes
   become_method: sudo
 
@@ -11,6 +12,7 @@
 
 - name: Setup the Database Server
   hosts: GoldenWasteDB
+  gather_facts: false
   become: yes
   become_method: sudo
 
@@ -20,6 +22,9 @@
 
 - name: Start Deploying
   hosts: GoldenWasteWebApp
+  gather_facts: false
+  become: yes
+  become_user: ubuntu
 
   roles:
     - deploy

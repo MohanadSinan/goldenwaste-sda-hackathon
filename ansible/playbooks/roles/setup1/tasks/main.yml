@@ -28,6 +28,3 @@
 
 - name: Setting WEB_PUBLIC_IP as an environment variables
   shell: echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress')" >> ~/.profile
-
-- name: Reload .profile file
-  shell: . ~/.profile

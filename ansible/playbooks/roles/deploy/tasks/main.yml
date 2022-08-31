@@ -2,7 +2,7 @@
 - name: Copy the project files to the host
   copy:
     src: /home/ubuntu/GoldenWaste
-    dest: /home/ubuntu/GoldenWaste
+    dest: /home/ubuntu
 
 - name: mvn validate
   shell: chdir=/home/ubuntu/GoldenWaste mvn validate

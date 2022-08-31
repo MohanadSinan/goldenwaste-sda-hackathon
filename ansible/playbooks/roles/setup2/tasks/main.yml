@@ -1,14 +1,17 @@
 ---
 - name: Update the Ansible inventory file
-  shell: echo -e '[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem' > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts.temp
+  shell: echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts.temp
 
-- shell: tail -c +4 /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts.temp > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+- name: Fix the Ansible inventory file
+  shell: tail -c +4 /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts.temp > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 
 - name: Update the application.properties file
-  shell: echo -e 'spring.mvc.view.prefix=/WEB-INF/\nspring.datasource.url=jdbc:mysql://$DB_PRIVATE_IP:{{ mysql_port }}/{{ db_name }}\nspring.datasource.username={{ db_user }}\nspring.datasource.password={{ db_password }}\nspring.jpa.hibernate.ddl-auto=create\nspring.mvc.hiddenmethod.filter.enabled=true' > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.temp
+  shell: echo -e "spring.mvc.view.prefix=/WEB-INF/\nspring.datasource.url=jdbc:mysql://$DB_PRIVATE_IP:{{ mysql_port }}/{{ db_name }}\nspring.datasource.username={{ db_user }}\nspring.datasource.password={{ db_password }}\nspring.jpa.hibernate.ddl-auto=create\nspring.mvc.hiddenmethod.filter.enabled=true" > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.temp
 
-- shell:  tail -c +4 /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.temp > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.j2
+- name: Fix the application.properties file
+  shell:  tail -c +4 /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.temp > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/setup2/templates/application.properties.j2
 
-- template:
+- name: Copy the fixed application.properties file
+  template:
     src: application.properties.j2
     dest: /home/ubuntu/GoldenWaste/src/main/resources/application.properties
