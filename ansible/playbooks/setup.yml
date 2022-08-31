@@ -7,4 +7,5 @@
   become_user: ubuntu
 
   roles:
-    - setup
+    - setup1
+    - setup2

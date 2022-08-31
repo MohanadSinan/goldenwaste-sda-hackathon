@@ -1,27 +1,4 @@
 ---
-- name: Setting ANSIBLE_INVENTORY environmental configuration
-  shell: echo "export ANSIBLE_INVENTORY=/home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts" >> ~/.profile
-
-- name: Setting ANSIBLE_HOST_KEY_CHECKING environmental configuration
-  shell: echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> ~/.profile
-
-- name: Reload .profile file
-  shell: . ~/.profile
-
-- name: Copy AWS config file
-  template:
-    src: config
-    dest: /home/ubuntu/.aws/config
-    mode: '0600'
-    force: yes
-
-- name: Copy AWS credentials file
-  template:
-    src: credentials
-    dest: /home/ubuntu/.aws/credentials
-    mode: '0600'
-    force: yes
-
 - name: Setting WEB_PRIVATE_IP as an environment variables
   shell: echo "export WEB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)" >> ~/.profile
 
@@ -30,9 +7,6 @@
 
 - name: Setting WEB_PUBLIC_IP as an environment variables
   shell: echo "export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> ~/.profile
-
-- name: Reload .profile file
-  shell: . ~/.profile
 
 - name: Update the Ansible inventory file
   shell: echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
