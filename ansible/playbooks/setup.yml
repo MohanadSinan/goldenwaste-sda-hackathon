@@ -1,33 +1,10 @@
 ---
-- mame: Setup Ansible configurations
+- name: Setup Ansible configurations
   hosts: localhost
   gather_facts: false
   connection: local
+  become: yes
+  become_user: ubuntu
 
   roles:
     - setup
-
-- name: Setup the Web App Server
-  hosts: GoldenWasteWebApp
-  become: yes
-  become_method: sudo
-
-  roles:
-    - maven
-    - java
-    - nginx
-
-- name: Setup the Database Server
-  hosts: GoldenWasteDB
-  become: yes
-  become_method: sudo
-
-  roles:
-    - docker
-    - mysql
-
-- name: Start Deploying
-  hosts: GoldenWasteWebApp
-
-  roles:
-    - deploy
