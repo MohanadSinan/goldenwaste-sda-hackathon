@@ -1,0 +1,10 @@
+---
+- name: Setup Ansible configurations
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  become: yes
+  become_user: ubuntu
+
+  roles:
+    - setup2
