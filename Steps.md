@@ -1,5 +1,27 @@
 ## Step1:
 
+vim /home/ubuntu/GoldenWaste/ansible/playbooks/group_vars/all
+
+add 
+
+```yaml
+# AWS configure
+aws_access_key_id: AKIAYI5ZPTNKT4K26FJ2
+aws_secret_access_key: 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
+aws_region: us-east-1
+aws_output: text
+```
+
+sudo ansible-playbook /home/ubuntu/GoldenWaste/ansible/playbooks/setup.yml
+
+
+
+
+
+
+
+
+
 Creating three EC2 instances, one Ubuntu Linux server as a Master, one Ubuntu Linux web server and one Ubuntu Linux as a MySQL database using CloudFormation template.
 
 **`GoldenWasteVPC.yml`**

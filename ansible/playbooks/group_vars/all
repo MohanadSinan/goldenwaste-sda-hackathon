@@ -8,3 +8,8 @@ mysql_container_name: MySQL
 mysql_state: started
 # You shouldn't need to change this.
 mysql_port: 3306
+# AWS configure
+aws_access_key_id: 
+aws_secret_access_key: 
+aws_region: us-east-1
+aws_output: text
