@@ -1,4 +1,12 @@
 ---
+- mame: Setup Ansible configurations
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  roles:
+    - setup
+
 - name: Setup the Web App Server
   hosts: GoldenWasteWebApp
   become: yes
@@ -8,7 +16,6 @@
     - maven
     - java
     - nginx
-    - setup
 
 - name: Setup the Database Server
   hosts: GoldenWasteDB

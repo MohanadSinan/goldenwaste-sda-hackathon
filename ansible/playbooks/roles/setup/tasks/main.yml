@@ -1,27 +1,32 @@
 ---
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_URL={{ ansible_host }}" >> /etc/profile
+- name: Setting ANSIBLE_INVENTORY environmental configuration
+  shell: export ANSIBLE_INVENTORY=/home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
 
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_PORT={{ mysql_port }}" >> /etc/profile
+- name: Setting ANSIBLE_HOST_KEY_CHECKING environmental configuration
+  shell: export ANSIBLE_HOST_KEY_CHECKING=False
 
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_NAME={{ db_name }}" >> /etc/profile
+- name: Configure AWS_ACCESS_KEY_ID with EC2DescribeInstancesReadOnly
+  shell: export AWS_ACCESS_KEY_ID=AKIAYI5ZPTNKZFCMDBXG
 
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_USERNAME={{ db_user }}" >> /etc/profile
-  
-- name: Set Linux environment variables
-  shell: echo "export GOLDEN_DB_PASSWORD={{ db_password }}" >> /etc/profile
+- name: Configure AWS_SECRET_ACCESS_KEY with EC2DescribeInstancesReadOnly
+  shell: export AWS_SECRET_ACCESS_KEY=HrhifsUEKsNuVyyH/pUkJzqK6cpFzqGGneGWTwkv
 
-- name: Reload bash's .profile
-  shell: . /etc/profile
+- name: Setting WEB_PRIVATE_IP as an environment variables
+  shell: export WEB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
 
-- name: Clone a github repository
-  shell: git clone -b EC2_VPC_v2 https://github.com/MohanadSinan/goldenwaste-sda-hackathon.git /home/ubuntu/GoldenWaste
+- name: Setting DB_PRIVATE_IP as an environment variables
+  shell: export DB_PRIVATE_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteDB --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
 
-- name: Changing the owner of GoldenWaste file
-  shell: chown ubuntu /home/ubuntu/GoldenWaste
+- name: Setting WEB_PUBLIC_IP as an environment variables
+  shell: export WEB_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --filters Name=tag:Name,Values=GoldenWasteWebApp --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
 
-- name: Changing the group ownership of GoldenWaste file
-  shell: chgrp ubuntu /home/ubuntu/GoldenWaste
+- name: Update the Ansible inventory file
+  shell: echo -e "[GoldenWasteWebApp]\nWebApp ansible_user=ubuntu ansible_host=$WEB_PRIVATE_IP\n\n[GoldenWasteDB]\nDB ansible_user=ubuntu ansible_host=$DB_PRIVATE_IP\n\n[all:vars]\nansible_ssh_private_key_file=/home/ubuntu/GoldenWaste/.ssh/temp.pem" > /home/ubuntu/GoldenWaste/ansible/hosts/GoldenWasteHosts
+
+- name: Update the default.conf file
+  shell: echo -e 'server {\n    listen 80;\n\n    server_name $WEB_PUBLIC_IP ;\n\n    location / {\n        proxy_pass http://localhost:8080;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection 'upgrade';\n        proxy_set_header Host $host;\n        proxy_cache_bypass $http_upgrade;\n    }\n}' > /home/ubuntu/GoldenWaste/ansible/playbooks/roles/nginx/templates/default.conf
+
+- name: Update the default.conf file
+  template:
+    src: application.properties
+    dest: /home/ubuntu/GoldenWaste/src/main/resources/application.properties

@@ -209,12 +209,8 @@ Resources:
           sudo echo Master > /etc/hostname
           # Install AWS CLI
           sudo apt install awscli -y
-          # Run setup1.sh script
-          sudo chmod +x /home/ubuntu/GoldenWaste/ansible/setup1.sh
-          sudo /home/ubuntu/GoldenWaste/ansible/setup1.sh
-          # Run setup2.sh script
-          sudo chmod +x /home/ubuntu/GoldenWaste/ansible/setup2.sh
-          /home/ubuntu/GoldenWaste/ansible/setup2.sh
+          # Change the permissions of private SSH key
+          sudo chmod 400 /home/ubuntu/GoldenWaste/.ssh/temp.pem
 
   WebAppInstance:
     Type: 'AWS::EC2::Instance'
