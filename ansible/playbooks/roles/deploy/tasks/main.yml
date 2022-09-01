@@ -19,6 +19,16 @@
 - name: mvn package
   shell: chdir=/home/ubuntu/GoldenWaste mvn package
 
+- name: Create goldenwaste folder
+  become: yes
+  become_method: sudo
+  shell: mkdir /var/www/goldenwaste
+
+- name: Copy the jar file to /var/www/goldenwaste
+  become: yes
+  become_method: sudo
+  shell: cp /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar /var/www/goldenwaste/goldenwaste.jar
+
 - name: copy goldenwaste.service to systemd
   become: yes
   become_method: sudo
@@ -35,6 +45,3 @@
   become: yes
   become_method: sudo
   shell: systemctl enable goldenwaste.service
-
-- name: Wait for WebApp to start
-  wait_for: port=80 timeout=60

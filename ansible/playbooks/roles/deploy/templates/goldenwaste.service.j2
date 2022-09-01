@@ -1,0 +1,12 @@
+[Unit]
+Description=GoldenWaste webserver service
+
+[Service]
+ExecStart=/usr/bin/java -jar /var/www/goldenwaste/goldenwaste.jar
+StandardOutput=file:/var/log/goldenwaste.out.txt
+StandardError=file:/var/log/goldenwaste.err.txt
+Type=simple
+WorkingDirectory=/var/www/goldenwaste
+
+[Install]
+WantedBy=multi-user.target

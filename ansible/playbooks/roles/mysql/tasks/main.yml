@@ -15,4 +15,4 @@
       MYSQL_PASSWORD: "DevOps2022"
       MYSQL_ROOT_PASSWORD: "DevOps@2022"
     restart_policy: always
-    state: present
+    state: started
