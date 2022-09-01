@@ -4,30 +4,30 @@
     src: /home/ubuntu/GoldenWaste
     dest: /home/ubuntu
 
-- name: mvn validate
-  shell: chdir=/home/ubuntu/GoldenWaste mvn validate
-
 - name: mvn clean
   shell: chdir=/home/ubuntu/GoldenWaste mvn clean
 
 - name: mvn compile
   shell: chdir=/home/ubuntu/GoldenWaste mvn compile
 
-- name: mvn test
-  shell: chdir=/home/ubuntu/GoldenWaste mvn test
-
 - name: mvn package
   shell: chdir=/home/ubuntu/GoldenWaste mvn package
 
-- name: Create goldenwaste folder
-  become: yes
-  become_method: sudo
-  shell: mkdir /var/www/goldenwaste
+#- name: Create goldenwaste folder
+#  become: yes
+#  become_method: sudo
+#  file:
+#    path: /var/www/goldenwaste
+#    state: directory
+#    mode: '0755'
 
-- name: Copy the jar file to /var/www/goldenwaste
-  become: yes
-  become_method: sudo
-  shell: cp /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar /var/www/goldenwaste/goldenwaste.jar
+#- name: Copy the jar file to /var/www/goldenwaste
+#  become: yes
+#  become_method: sudo
+#  shell: cp /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar /var/www/goldenwaste/goldenwaste.jar
+
+- name: Start jar file
+  shell: java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar
 
 - name: copy goldenwaste.service to systemd
   become: yes
@@ -36,12 +36,12 @@
     src: goldenwaste.service.j2
     dest: /usr/lib/systemd/system/goldenwaste.service
 
-- name: Start goldenwaste.service
-  become: yes
-  become_method: sudo
-  shell: systemctl start goldenwaste.service
+#- name: Start goldenwaste.service
+#  become: yes
+#  become_method: sudo
+#  shell: systemctl start goldenwaste.service
 
-- name: Enable goldenwaste.service
-  become: yes
-  become_method: sudo
-  shell: systemctl enable goldenwaste.service
+#- name: Enable goldenwaste.service
+#  become: yes
+#  become_method: sudo
+#  shell: systemctl enable goldenwaste.service
