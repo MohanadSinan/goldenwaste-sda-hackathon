@@ -65,7 +65,6 @@ Resources:
 
   GoldenWasteVPC:
     Type: 'AWS::EC2::VPC'
-    Description: Golden Waste VPC definition
     Properties:
       CidrBlock: 10.0.0.0/16
       Tags:
@@ -193,7 +192,7 @@ Resources:
         - Key: Name
           Value: Master
       UserData:
-        Fn::Base64: !Sub |
+        !Base64: |
           #!/bin/bash
           # install Ansible
           sudo apt update -y
@@ -229,7 +228,7 @@ Resources:
         - Key: Name
           Value: GoldenWasteWebApp
       UserData:
-        Fn::Base64: !Sub |
+        !Base64: |
           #!/bin/bash
           # Setting instance hostname
           sudo hostname GoldenWasteWebApp
@@ -250,7 +249,7 @@ Resources:
         - Key: Name
           Value: GoldenWasteDB
       UserData:
-        Fn::Base64: !Sub |
+        !Base64: |
           #!/bin/bash
           # Setting instance hostname
           sudo hostname GoldenWasteDB
