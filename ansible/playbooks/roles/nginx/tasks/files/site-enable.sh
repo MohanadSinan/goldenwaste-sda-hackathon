@@ -22,5 +22,5 @@ server {
 sed -i 's/public_ip/'${public_ip}'/g' goldenwaste
 sudo cp goldenwaste /etc/nginx/sites-available/goldenwaste
 ln -s /etc/nginx/sites-available/goldenwaste /etc/nginx/sites-enabled
-rm -f -r goldenwaste
+rm -fr goldenwaste
 fi

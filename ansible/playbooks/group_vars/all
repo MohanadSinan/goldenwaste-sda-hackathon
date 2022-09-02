@@ -4,12 +4,10 @@ db_name: goldenwastedb
 db_user: goldenwaste
 db_password: DevOps2022
 mysql_root_password: DevOps@2022
-mysql_container_name: MySQL
+mysql_container_name: mysql
 mysql_state: started
-# You shouldn't need to change this.
-mysql_port: 3306
 # AWS configure
-aws_access_key_id: 
-aws_secret_access_key: 
+aws_access_key_id: XXXXXX
+aws_secret_access_key: XXXXXXXXXXXX
 aws_region: us-east-1
 aws_output: text

@@ -9,6 +9,7 @@
     - maven
     - java
     - nginx
+    - npm
 
 - name: Setup the Database Server
   hosts: GoldenWasteDB

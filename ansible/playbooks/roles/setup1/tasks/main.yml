@@ -5,19 +5,26 @@
 - name: Setting ANSIBLE_HOST_KEY_CHECKING environmental configuration
   shell: echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> ~/.profile
 
-- name: Create .aws folder
-  shell: mkdir /home/ubuntu/.aws
+- name: Create .aws directory if it does not exist
+  file:
+    path: /home/ubuntu/.aws
+    state: directory
+    mode: '0755'
 
-- name: Copy AWS config file
+- name: Copy AWS config file to .aws directory
   template:
     src: config.j2
     dest: /home/ubuntu/.aws/config
+    owner: root
+    group: root
     mode: '0600'
 
-- name: Copy AWS credentials file
+- name: Copy AWS credentials file to .aws directory
   template:
     src: credentials.j2
     dest: /home/ubuntu/.aws/credentials
+    owner: root
+    group: root
     mode: '0600'
 
 - name: Setting WEB_PRIVATE_IP as an environment variables

@@ -4,11 +4,20 @@
     src: /home/ubuntu/GoldenWaste
     dest: /home/ubuntu
 
+- name: kill-port 8080
+  shell: npx kill-port 8080
+
+- name: mvn validate
+  shell: chdir=/home/ubuntu/GoldenWaste mvn validate
+
 - name: mvn clean
   shell: chdir=/home/ubuntu/GoldenWaste mvn clean
 
 - name: mvn compile
   shell: chdir=/home/ubuntu/GoldenWaste mvn compile
+
+- name: mvn test
+  shell: chdir=/home/ubuntu/GoldenWaste mvn test
 
 - name: mvn package
   shell: chdir=/home/ubuntu/GoldenWaste mvn package
@@ -27,7 +36,9 @@
 #  shell: cp /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar /var/www/goldenwaste/goldenwaste.jar
 
 - name: Start jar file
-  shell: java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar
+  become: yes
+  become_user: ubuntu
+  shell: nohup java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar --log=stdout > ngrok.log &
 
 - name: copy goldenwaste.service to systemd
   become: yes
