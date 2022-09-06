@@ -5,6 +5,8 @@
     dest: /home/ubuntu
 
 - name: start deploying
+  become: yes
+  become_user: ubuntu
   script: deploy.sh
   args:
     chdir: /home/ubuntu/GoldenWaste
@@ -22,10 +24,10 @@
 #  become_method: sudo
 #  shell: cp /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar /var/www/goldenwaste/goldenwaste.jar
 
-- name: Start jar file
-  become: yes
-  become_user: ubuntu
-  shell: nohup java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar --log=stdout > ngrok.log &
+#- name: Start jar file
+#  become: yes
+#  become_user: ubuntu
+#  shell: nohup java -jar /home/ubuntu/GoldenWaste/target/goldenWastedd-0.0.1-SNAPSHOT.jar --log=stdout > ngrok.log &
 
 #- name: copy goldenwaste.service to systemd
 #  become: yes
