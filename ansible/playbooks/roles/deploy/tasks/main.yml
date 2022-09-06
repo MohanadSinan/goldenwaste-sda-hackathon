@@ -6,6 +6,8 @@
 
 - name: start deploying
   script: deploy.sh
+  args:
+    chdir: /home/ubuntu/GoldenWaste
 
 #- name: Create goldenwaste folder
 #  become: yes
