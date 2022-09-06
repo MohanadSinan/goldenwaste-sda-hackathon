@@ -1,5 +1,5 @@
 ---
-# These are the WordPress database settings
+# These are the database settings
 db_name: goldenwastedb 
 db_user: goldenwaste
 db_password: DevOps2022
